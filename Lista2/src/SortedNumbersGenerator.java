@@ -11,7 +11,7 @@ public class SortedNumbersGenerator {
         int low = 0;
         int high = 2*amount;
         for(int i = 0; i<amount; i++){
-            array[i] = r.nextInt(low,high);
+            //array[i] = r.nextInt(low,high);
         }
         Arrays.sort(array);
         return array;
