@@ -6,16 +6,12 @@ public class Select {
     static int timesSwapped = 0;
 
     public static int select(int[] array,int p,int q,int i){
-        if (p==q) return array[p];
-//        System.out.println("Array before partition " + Arrays.toString(array));
-        int r = partition(array, p, q);
-//        System.out.println("R: " + r);
-//        System.out.println("Array[r] " + array[r]);
-//        System.out.println("Array after partition " + Arrays.toString(array));
-        int k = r - p+1;
-        if (k==i) return array[r];
-        if (i<k) return select(array,p,r-1,i);
-        else return select(array,r+1,q,i-k);
+        int index=4;
+        do{
+            if (index > q) index = q;
+            insertionSort(array, p, index);
+        } while(index < q);
+        return -1;
     }
 
     static int partition(int[] arr, int low, int high)
@@ -39,14 +35,20 @@ public class Select {
         return (i + 1);
     }
 
-    public static void main(String[] args) {
-//        int[] array = {10,20,30,40,50,60,70,80};
-        int[] array = {40,40,60,40,70,20,80,10,4,6,8,2,4,1,6,32,12,52};
-        for (int i = 1; i<=array.length; i++){
-            System.out.println("START for i: " + i);
-            System.out.println(select(array,0,array.length-1,i));
-            System.out.println("END for i: " + i);
+    static void insertionSort(int[] array, int p, int q){
+        for (int j = p+1; j < q+1; j++) {
+            int key = array[j];
+            int i = j - 1;
+            while (i > p-1 && array[i] > key) {
+                array[i + 1] = array[i];
+                i--;
+            }
+            array[i + 1] = key;
         }
+    }
+
+    public static void main(String[] args) {
+        int[] array = {20,10,60,30,25,37,22,14};
     }
 
 //    public static void main(String[] args) throws IOException {
