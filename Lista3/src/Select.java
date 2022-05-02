@@ -61,7 +61,7 @@ public class Select {
             for (i = 0; i < n / subArrayCapacity; i++)
                 median[i] = findMedian(arr, l + i * subArrayCapacity, l + i * subArrayCapacity + subArrayCapacity);
             if (i * subArrayCapacity < n) {
-                median[i] = findMedian(arr, l + i * 5, l + i * 5 + n % 5);
+                median[i] = findMedian(arr, l + i * subArrayCapacity, l + i * subArrayCapacity + n % subArrayCapacity);
                 i++;
             }
             int medOfMed = (i == 1) ? median[i - 1] :
