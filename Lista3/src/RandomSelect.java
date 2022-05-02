@@ -28,70 +28,78 @@ public class RandomSelect {
             if (arr[j] < pivot)
             {
                 i++;
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
+                swap(arr,i,j);
             }
         }
-        int temp = arr[i+1];
-        arr[i+1] = arr[high];
-        arr[high] = temp;
+        swap(arr,i+1,high);
         return (i + 1);
     }
 
-    public static void main(String[] args) {
-//        int[] array = {10,20,30,40,50,60,70,80};
-        int[] array = {40,40,60,40,70,20,80,10,4,6,8,2,4,1,6,32,12,52};
-        for (int i = 1; i<=array.length; i++){
-            System.out.println("START for i: " + i);
-            System.out.println(randomSelect(array,0,array.length-1,i));
-            System.out.println("END for i: " + i);
-        }
+    static void swap(int[] array, int p, int q){
+        int temp = array[p];
+        array[p] = array[q];
+        array[q] = temp;
     }
 
-//    public static void main(String[] args) throws IOException {
-//        String response = "";
-//        int digit;
-//        while (true) {
-//            if ((digit = System.in.read()) != 120) {
-//                response += Integer.toString(Character.getNumericValue(digit));
-//            } else {
-//                break;
-//            }
-//        }
-//        int amountOfNumbers = Integer.parseInt(response);
-//        System.out.println(amountOfNumbers);
-//        int[] array = new int[amountOfNumbers];
-//        for (int i = 0; i < amountOfNumbers; i++) {
-//            response = "";
-//            while (true) {
-//                if ((digit = System.in.read()) != 120) {
-//                    response += Integer.toString(Character.getNumericValue(digit));
-//                } else {
-//                    break;
-//                }
-//            }
-//            array[i] = Integer.parseInt(response);
-//        }
-//
-//        if (amountOfNumbers < 50) {
-//            System.out.println(Arrays.toString(array));
-//        }
-//
-//        if (amountOfNumbers < 50) {
-//            System.out.println(Arrays.toString(array));
-//        }
-////        System.out.println("Times Compared: " + timesCompared);
-////        System.out.println("Times Swapped: " + timesSwapped);
-//
-//        int lastNumber = array[0];
-//        for (int i = 1; i < amountOfNumbers; i++) {
-//            if (lastNumber > array[i]) {
-//                System.out.println("Not sorted!");
-//                return;
-//            }
-//            lastNumber = array[i];
-//        }
-//        System.out.println("Sorted!");
+//    public static void main(String[] args) {
+////        int[] array = {10,20,30,40,50,60,70,80};
+//        int[] array = Lista2.RandomNumbersGenerator.numberGenerator(100);
+//        System.out.println(randomSelect(array, 0, array.length-1, 30));
+//        Lista2.MergeSort.mergeSort(array);
+//        System.out.println(array[30-1]);
 //    }
+
+    public static void main(String[] args) throws IOException {
+        if(args.length < 1 ){
+            System.out.println("Please provide amount of numbers to generate!");
+            return;
+        }
+        int kth;
+        try{
+            kth = Integer.parseInt(args[0]);
+        } catch (Exception e ){
+            //System.out.println("Wrong argument!");
+            return;
+        }
+        String response = "";
+        int digit;
+        while (true) {
+            if ((digit = System.in.read()) != 120) {
+                response += Integer.toString(Character.getNumericValue(digit));
+            } else {
+                break;
+            }
+        }
+        int amountOfNumbers = Integer.parseInt(response);
+//        System.out.println(amountOfNumbers);
+        int[] array = new int[amountOfNumbers];
+        for (int i = 0; i < amountOfNumbers; i++) {
+            response = "";
+            while (true) {
+                if ((digit = System.in.read()) != 120) {
+                    response += Integer.toString(Character.getNumericValue(digit));
+                } else {
+                    break;
+                }
+            }
+            array[i] = Integer.parseInt(response);
+        }
+
+        if (amountOfNumbers < 50) {
+            System.out.println(Arrays.toString(array));
+        }
+
+        int result = randomSelect(array,0,amountOfNumbers-1,kth);
+        System.out.println("Kth element is: " + result);
+
+        if (amountOfNumbers < 50) {
+            System.out.println(Arrays.toString(array));
+        }
+//        System.out.println("Times Compared: " + timesCompared);
+//        System.out.println("Times Swapped: " + timesSwapped);
+
+        MergeSort.mergeSort(array);
+        if (array[kth-1] == result) System.out.println("WORKED");
+        else System.out.println("DIDNT WORKED");
+    }
 }

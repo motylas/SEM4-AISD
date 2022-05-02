@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,8 +57,8 @@ public class GenerateData {
             }
 
             //Merge Sort
-            timesSwappedMerge[0] = "Mean MergeSort Swaps";
-            timesComparedMerge[0] = "Mean MergeSort Comparisons";
+            timesSwappedMerge[0] = "Mean Lista2.MergeSort Swaps";
+            timesComparedMerge[0] = "Mean Lista2.MergeSort Comparisons";
             for (int i = 100; i <= 1000; i += 100) {
                 MergeSort.timesSwapped = 0;
                 MergeSort.timesCompared = 0;
@@ -80,9 +79,9 @@ public class GenerateData {
             }
 
 
-            //InsertionSort
-            timesSwappedInsertion[0] = "Mean InsertionSort Swaps";
-            timesComparedInsertion[0] = "Mean InsertionSort Comparisons";
+            //Lista2.InsertionSort
+            timesSwappedInsertion[0] = "Mean Lista2.InsertionSort Swaps";
+            timesComparedInsertion[0] = "Mean Lista2.InsertionSort Comparisons";
             for (int i = 100; i <= 1000; i += 100) {
                 int[] array = RandomNumbersGenerator.numberGenerator(i);
                 InsertionSort.timesSwapped = 0;
@@ -104,9 +103,9 @@ public class GenerateData {
             }
 
 
-            //QuickSort
-            timesSwappedQuick[0] = "Mean QuickSort Swaps";
-            timesComparedQuick[0] = "Mean QuickSort Comparisons";
+            //Lista2.QuickSort
+            timesSwappedQuick[0] = "Mean Lista2.QuickSort Swaps";
+            timesComparedQuick[0] = "Mean Lista2.QuickSort Comparisons";
             for (int i = 100; i <= 1000; i += 100) {
                 int[] array = RandomNumbersGenerator.numberGenerator(i);
                 QuickSort.timesSwapped = 0;
@@ -127,9 +126,9 @@ public class GenerateData {
                 timesComparedQuick[i / 100] = String.valueOf(timeTemp);
             }
 
-            //DualPivotQuickSort
-            timesSwappedDual[0] = "Mean DualPivotQuickSort Swaps";
-            timesComparedDual[0] = "Mean DualPivotQuickSort Comparisons";
+            //Lista2.DualPivotQuickSort
+            timesSwappedDual[0] = "Mean Lista2.DualPivotQuickSort Swaps";
+            timesComparedDual[0] = "Mean Lista2.DualPivotQuickSort Comparisons";
             for (int i = 100; i <= 1000; i += 100) {
                 int[] array = RandomNumbersGenerator.numberGenerator(i);
                 DualPivotQuickSort.timesSwapped = 0;
@@ -150,9 +149,9 @@ public class GenerateData {
                 timesComparedDual[i / 100] = String.valueOf(timeTemp);
             }
 
-            //HybridSort
-            timesSwappedHybrid[0] = "Mean HybridSort Swaps";
-            timesComparedHybrid[0] = "Mean HybridSort Comparisons";
+            //Lista2.HybridSort
+            timesSwappedHybrid[0] = "Mean Lista2.HybridSort Swaps";
+            timesComparedHybrid[0] = "Mean Lista2.HybridSort Comparisons";
             for (int i = 100; i <= 1000; i += 100) {
                 int[] array = RandomNumbersGenerator.numberGenerator(i);
                 HybridSort.timesSwapped = 0;
@@ -196,43 +195,43 @@ public class GenerateData {
             for (int i = 100; i <= 1000; i += 100) {
                 switch (j) {
                     case 0:
-                        snMerge[0] = "Mean MergeSort Swaps / N";
+                        snMerge[0] = "Mean Lista2.MergeSort Swaps / N";
                         snMerge[i/100] = String.valueOf(Float.parseFloat(timesSwappedMerge[i/100]) / (float) i);
                         break;
                     case 1:
-                        cnMerge[0] = "Mean MergeSort Comparisons / N";
+                        cnMerge[0] = "Mean Lista2.MergeSort Comparisons / N";
                         cnMerge[i/100] = String.valueOf(Float.parseFloat(timesComparedMerge[i/100]) / (float) i);
                         break;
                     case 2:
-                        snInsertion[0] = "Mean InsertionSort Swaps / N";
+                        snInsertion[0] = "Mean Lista2.InsertionSort Swaps / N";
                         snInsertion[i/100] = String.valueOf(Float.parseFloat(timesSwappedInsertion[i/100]) / (float) i);;
                         break;
                     case 3:
-                        cnInsertion[0] = "Mean InsertionSort Comparisons / N";
+                        cnInsertion[0] = "Mean Lista2.InsertionSort Comparisons / N";
                         cnInsertion[i/100] = String.valueOf(Float.parseFloat(timesComparedInsertion[i/100]) / (float) i);
                         break;
                     case 4:
-                        snQuick[0] = "Mean QuickSort Swaps / N";
+                        snQuick[0] = "Mean Lista2.QuickSort Swaps / N";
                         snQuick[i/100] = String.valueOf(Float.parseFloat(timesSwappedQuick[i/100]) / (float) i);
                         break;
                     case 5:
-                        cnQuick[0] = "Mean QuickSort Comparisons / N";
+                        cnQuick[0] = "Mean Lista2.QuickSort Comparisons / N";
                         cnQuick[i/100] = String.valueOf(Float.parseFloat(timesComparedQuick[i/100]) / (float) i);
                         break;
                     case 6:
-                        snDual[0] = "Mean DualPivotQuickSort Comparisons / N";
+                        snDual[0] = "Mean Lista2.DualPivotQuickSort Comparisons / N";
                         snDual[i/100] = String.valueOf(Float.parseFloat(timesSwappedDual[i/100]) / (float) i);
                         break;
                     case 7:
-                        cnDual[0] = "Mean DualPivotQuickSort Comparisons / N";
+                        cnDual[0] = "Mean Lista2.DualPivotQuickSort Comparisons / N";
                         cnDual[i/100] = String.valueOf(Float.parseFloat(timesComparedDual[i/100]) / (float) i);
                         break;
                     case 8:
-                        snHybrid[0] = "Mean QuickSort Comparisons / N";
+                        snHybrid[0] = "Mean Lista2.QuickSort Comparisons / N";
                         snHybrid[i/100] = String.valueOf(Float.parseFloat(timesSwappedHybrid[i/100]) / (float) i);
                         break;
                     case 9:
-                        cnHybrid[0] = "Mean QuickSort Comparisons / N";
+                        cnHybrid[0] = "Mean Lista2.QuickSort Comparisons / N";
                         cnHybrid[i/100] = String.valueOf(Float.parseFloat(timesComparedHybrid[i/100]) / (float) i);
                         break;
                 }
