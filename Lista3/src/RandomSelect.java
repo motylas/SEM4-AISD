@@ -7,11 +7,9 @@ public class RandomSelect {
 
     public static int randomSelect(int[] array,int p,int q,int i){
         if (p==q) return array[p];
-//        System.out.println("Array before partition " + Arrays.toString(array));
+        if(array.length <= 50) System.out.println("Array before partition " + Arrays.toString(array));
         int r = partition(array, p, q);
-//        System.out.println("R: " + r);
-//        System.out.println("Array[r] " + array[r]);
-//        System.out.println("Array after partition " + Arrays.toString(array));
+        if (array.length <= 50) System.out.println("Array after partition " + Arrays.toString(array));
         int k = r - p+1;
         if (k==i) return array[r];
         if (i<k) return randomSelect(array,p,r-1,i);
@@ -21,10 +19,12 @@ public class RandomSelect {
     static int partition(int[] arr, int low, int high)
     {
         int pivot = arr[high];
+        if (arr.length <= 50) System.out.println("Pivot: " + pivot);
         int i = (low - 1);
 
         for(int j = low; j <= high - 1; j++)
         {
+            timesCompared++;
             if (arr[j] < pivot)
             {
                 i++;
@@ -39,15 +39,8 @@ public class RandomSelect {
         int temp = array[p];
         array[p] = array[q];
         array[q] = temp;
+        timesSwapped++;
     }
-
-//    public static void main(String[] args) {
-////        int[] array = {10,20,30,40,50,60,70,80};
-//        int[] array = Lista2.RandomNumbersGenerator.numberGenerator(100);
-//        System.out.println(randomSelect(array, 0, array.length-1, 30));
-//        Lista2.MergeSort.mergeSort(array);
-//        System.out.println(array[30-1]);
-//    }
 
     public static void main(String[] args) throws IOException {
         if(args.length < 1 ){
@@ -58,7 +51,7 @@ public class RandomSelect {
         try{
             kth = Integer.parseInt(args[0]);
         } catch (Exception e ){
-            //System.out.println("Wrong argument!");
+            System.out.println("Wrong argument!");
             return;
         }
         String response = "";
@@ -71,7 +64,6 @@ public class RandomSelect {
             }
         }
         int amountOfNumbers = Integer.parseInt(response);
-//        System.out.println(amountOfNumbers);
         int[] array = new int[amountOfNumbers];
         for (int i = 0; i < amountOfNumbers; i++) {
             response = "";
@@ -86,17 +78,17 @@ public class RandomSelect {
         }
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            System.out.println("Array before randomSelect: " + Arrays.toString(array));
         }
 
         int result = randomSelect(array,0,amountOfNumbers-1,kth);
         System.out.println("Kth element is: " + result);
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            System.out.println("Array after randomSelect: " + Arrays.toString(array));
         }
-//        System.out.println("Times Compared: " + timesCompared);
-//        System.out.println("Times Swapped: " + timesSwapped);
+        System.out.println("Times Compared: " + timesCompared);
+        System.out.println("Times Swapped: " + timesSwapped);
 
         MergeSort.mergeSort(array);
         if (array[kth-1] == result) System.out.println("WORKED");
