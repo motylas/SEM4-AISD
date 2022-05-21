@@ -7,7 +7,7 @@ public class BST {
 
     public void insert(int value) {
         if (root == null) {
-            root = new Node(value);
+            root = new Node(value, null);
             return;
         }
         insertRec(value, root);
@@ -21,14 +21,14 @@ public class BST {
             if (currentNode.hasLeft()) {
                 insertRec(value, currentNode.getLeftNode());
             } else {
-                Node newNode = new Node(value);
+                Node newNode = new Node(value, currentNode);
                 currentNode.setLeftNode(newNode);
             }
         } else {
             if (currentNode.hasRight()) {
                 insertRec(value, currentNode.getRightNode());
             } else {
-                Node newNode = new Node(value);
+                Node newNode = new Node(value, currentNode);
                 currentNode.setRightNode(newNode);
             }
         }
@@ -39,35 +39,75 @@ public class BST {
             System.out.println("No value found in the tree!");
             return;
         }
-        if (value == root.getValue()) {
-            root = null;
-            return;
-        }
-        deleteRec(value, root, root);
+        deleteRec(value, root);
     }
+//    private void deleteRec(int value, Node currentNode, Node parentNode) {
+//        int currentNodeValue = currentNode.getValue();
+//        if (value == currentNodeValue) {
+//            if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
+//            else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode, parentNode);
+//            else delete0(value, parentNode);
+//        } else if (value < currentNodeValue) {
+//            if (!currentNode.hasLeft()) System.out.println("No value found in the tree!");
+//            else deleteRec(value, currentNode.getLeftNode(), currentNode);
+//        } else {
+//            if (!currentNode.hasRight()) System.out.println("No value found in the tree!");
+//            else deleteRec(value, currentNode.getRightNode(), currentNode);
+//        }
+//    }
+//
+//    private void delete0(int value, Node parentNode) {
+//        if (parentNode == null) root = null;
+//        else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) parentNode.setLeftNode(null);
+//        else parentNode.setRightNode(null);
+//    }
+//    private void delete1(int value, Node currentNode, Node parentNode) {
+//        if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) {
+//            if (currentNode.hasLeft()) parentNode.setLeftNode(currentNode.getLeftNode());
+//            else parentNode.setLeftNode(currentNode.getRightNode());
+//        } else {
+//            if (currentNode.hasLeft()) parentNode.setRightNode(currentNode.getLeftNode());
+//            else parentNode.setRightNode(currentNode.getRightNode());
+//        }
+//    }
+//
+//    private void delete2(Node currentNode) {
+//        Node parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
+//        Node maxNode;
+//        if (currentNode == parentOfMax) maxNode = currentNode.getLeftNode();
+//        else maxNode = parentOfMax.getRightNode();
+//        int maxNodeValue = maxNode.getValue();
+//        currentNode.setValue(maxNodeValue);
+//        if (maxNode.hasLeft()) delete1(maxNodeValue, maxNode, parentOfMax);
+//        else delete0(maxNodeValue, parentOfMax);
+//    }
 
-    private void deleteRec(int value, Node currentNode, Node parentNode) {
+    private void deleteRec(int value, Node currentNode) {
         int currentNodeValue = currentNode.getValue();
         if (value == currentNodeValue) {
             if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
-            else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode, parentNode);
-            else delete0(value, parentNode);
+            else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode);
+            else delete0(value, currentNode);
         } else if (value < currentNodeValue) {
             if (!currentNode.hasLeft()) System.out.println("No value found in the tree!");
-            else deleteRec(value, currentNode.getLeftNode(), currentNode);
+            else deleteRec(value, currentNode.getLeftNode());
         } else {
             if (!currentNode.hasRight()) System.out.println("No value found in the tree!");
-            else deleteRec(value, currentNode.getRightNode(), currentNode);
+            else deleteRec(value, currentNode.getRightNode());
         }
     }
 
-    private void delete0(int value, Node parentNode) {
-        if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) parentNode.setLeftNode(null);
+    private void delete0(int value, Node currentNode) {
+        Node parentNode = currentNode.getParentNode();
+        if (parentNode == null) root = null;
+        else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) parentNode.setLeftNode(null);
         else parentNode.setRightNode(null);
     }
 
-    private void delete1(int value, Node currentNode, Node parentNode) {
-        if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) {
+    private void delete1(int value, Node currentNode) {
+        Node parentNode = currentNode.getParentNode();
+        if (parentNode == null) root = currentNode;
+        else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) {
             if (currentNode.hasLeft()) parentNode.setLeftNode(currentNode.getLeftNode());
             else parentNode.setLeftNode(currentNode.getRightNode());
         } else {
@@ -83,7 +123,7 @@ public class BST {
         else maxNode = parentOfMax.getRightNode();
         int maxNodeValue = maxNode.getValue();
         currentNode.setValue(maxNodeValue);
-        if (maxNode.hasLeft()) delete1(maxNodeValue, maxNode, parentOfMax);
+        if (maxNode.hasLeft()) delete1(maxNodeValue, maxNode);
         else delete0(maxNodeValue, parentOfMax);
     }
 
@@ -135,9 +175,8 @@ public class BST {
         bst.insert(17);
         bst.insert(20);
         bst.insert(18);
-        bst.insert(21);
         bst.showTree();
-        bst.delete(20);
+        bst.delete(12);
         bst.showTree();
     }
 }
