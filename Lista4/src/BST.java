@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+
 public class BST {
     protected NodeBST root;
 
@@ -5,49 +9,56 @@ public class BST {
         root = null;
     }
 
-    public void insert(int value) {
+    public NodeBST insert(int value) {
         if (root == null) {
             root = new NodeBST(value, null);
-            return;
+            return root;
         }
-        insertRec(value, root);
+        return insertRec(value, root);
     }
 
-    protected void insertRec(int value, NodeBST currentNode) {
-        int currentNodeValue = currentNode.getValue();
-        if (value == currentNodeValue) {
-            System.out.println("Value already in tree!");
-        } else if (value < currentNodeValue) {
-            if (currentNode.hasLeft()) {
-                insertRec(value, currentNode.getLeftNode());
-            } else currentNode.setLeftNode(new NodeBST(value, currentNode));
-        } else {
-            if (currentNode.hasRight()) {
-                insertRec(value, currentNode.getRightNode());
-            } else currentNode.setRightNode(new NodeBST(value, currentNode));
+    protected NodeBST insertRec(int value, NodeBST currentNode) {
+        while (true) {
+            int currentNodeValue = currentNode.getValue();
+            if (value == currentNodeValue) return null;
+            else if (value < currentNodeValue) {
+                if (currentNode.hasLeft()) currentNode = currentNode.getLeftNode();
+                else {
+                    currentNode.setLeftNode(new NodeBST(value, currentNode));
+                    return currentNode.getLeftNode();
+                }
+            } else {
+                if (currentNode.hasRight()) currentNode = currentNode.getRightNode();
+                else {
+                    currentNode.setRightNode(new NodeBST(value, currentNode));
+                    return currentNode.getRightNode();
+                }
+            }
         }
     }
 
-    public void delete(int value) {
-        if (root == null) {
-            System.out.println("No value found in the tree!");
-            return;
-        }
-        deleteRec(value, root);
+    public NodeBST delete(int value) {
+        if (root == null) return null;
+
+        return deleteRec(value, root);
     }
 
-    private void deleteRec(int value, NodeBST currentNode) {
-        int currentNodeValue = currentNode.getValue();
-        if (value == currentNodeValue) {
-            if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
-            else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode);
-            else delete0(value, currentNode);
-        } else if (value < currentNodeValue) {
-            if (!currentNode.hasLeft()) System.out.println("No value found in the tree!");
-            else deleteRec(value, currentNode.getLeftNode());
-        } else {
-            if (!currentNode.hasRight()) System.out.println("No value found in the tree!");
-            else deleteRec(value, currentNode.getRightNode());
+    private NodeBST deleteRec(int value, NodeBST currentNode) {
+        while (true) {
+            int currentNodeValue = currentNode.getValue();
+            if (value == currentNodeValue) {
+                if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
+                else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode);
+                else delete0(value, currentNode);
+                return currentNode;
+            } else if (value < currentNodeValue) {
+                if (!currentNode.hasLeft()) return null;
+                else currentNode = currentNode.getLeftNode();
+
+            } else {
+                if (!currentNode.hasRight()) return null;
+                else currentNode = currentNode.getRightNode();
+            }
         }
     }
 
@@ -114,11 +125,57 @@ public class BST {
     }
 
     public static void main(String[] args) {
-        BST bst = new BST();
-        bst.insert(12);
-        bst.insert(5);
-        bst.insert(3);
-        bst.insert(1);
-        bst.showTree();
+        if (args.length < 1) return;
+        int amountOfNumbers;
+        try {
+            amountOfNumbers = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            return;
+        }
+
+        BST case1 = new BST();
+        BST case2 = new BST();
+
+        // Sorted array, case1
+        int[] sortedNumbers = new int[amountOfNumbers];
+        Random random = new Random();
+        int bound = amountOfNumbers * 2;
+        for (int i = 0; i < amountOfNumbers; i++) sortedNumbers[i] = random.nextInt(bound);
+        Arrays.sort(sortedNumbers);
+        for (int i = 0; i < amountOfNumbers; i++) {
+            if (case1.insert(sortedNumbers[i]) == null) System.out.println("Value already exist in tree");
+            else{
+                System.out.println("Inserted:  " + sortedNumbers[i]);
+                case1.showTree();
+            }
+        }
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            if (case1.delete(value) == null) System.out.println("No value found in tree");
+            else{
+                System.out.println("Deleted:  " + value);
+                case1.showTree();
+            }
+        }
+
+        System.out.println("XXXXXXXXXXXXXXXX");
+
+        // Case 2
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            if (case2.insert(value) == null) System.out.println("Value already exist in tree");
+            else{
+                System.out.println("Inserted:  " + value);
+                case2.showTree();
+            }
+        }
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            if (case2.delete(value) == null) System.out.println("No value found in tree");
+            else{
+                System.out.println("Deleted:  " + value);
+                case2.showTree();
+            }
+        }
     }
 }

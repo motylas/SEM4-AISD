@@ -1,15 +1,19 @@
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
-public class RandomNumbersGenerator {
-
-    public static int[] numberGenerator(int amount){
+public class SortedNumbersGenerator {
+    static int[] sortedNumberGenerator(int amount){
         int[] array = new int[amount];
         Random r = new Random();
+        int low = 0;
         int high = 2*amount;
         for(int i = 0; i<amount; i++){
             array[i] = r.nextInt(high);
         }
+        Arrays.sort(array);
         return array;
     }
 
@@ -25,7 +29,7 @@ public class RandomNumbersGenerator {
             //System.out.println("Wrong argument!");
             return;
         }
-        int[] generatedNumbers = numberGenerator(amountOfNumbers);
+        int[] generatedNumbers = sortedNumberGenerator(amountOfNumbers);
         System.out.print(amountOfNumbers);
         System.out.print("x");
         for(int i = 0; i<amountOfNumbers;i++){

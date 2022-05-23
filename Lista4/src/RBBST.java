@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+
 public class RBBST {
     private NodeRB root;
 
@@ -55,7 +59,7 @@ public class RBBST {
                 }
             } else {
                 NodeRB uncle = currentNode.getParentNode().getParentNode().getLeftNode();
-                if (uncle.isRed()) {
+                if (uncle != null && uncle.isRed()) {
                     currentNode.getParentNode().setColor(false);
                     uncle.setColor(false);
                     currentNode.getParentNode().getParentNode().setColor(true);
@@ -285,21 +289,49 @@ public class RBBST {
     }
 
     public static void main(String[] args) {
-        RBBST rbbst = new RBBST();
-        rbbst.insert(42);
-        rbbst.insert(10);
-        rbbst.insert(64);
-        rbbst.insert(7);
-        rbbst.insert(29);
-        rbbst.insert(50);
-        rbbst.insert(83);
-        rbbst.insert(5);
-        rbbst.insert(31);
-        rbbst.delete(5);
-        rbbst.delete(10);
-        rbbst.delete(31);
-        rbbst.delete(7);
-        rbbst.delete(229);
-        rbbst.showTree();
+        if (args.length < 1) return;
+        int amountOfNumbers;
+        try {
+            amountOfNumbers = Integer.parseInt(args[0]);
+        } catch (Exception e) {
+            return;
+        }
+
+        RBBST case1 = new RBBST();
+        RBBST case2 = new RBBST();
+
+        // Sorted array, case1
+        int[] sortedNumbers = new int[amountOfNumbers];
+        Random random = new Random();
+        int bound = amountOfNumbers * 2;
+        for (int i = 0; i < amountOfNumbers; i++) sortedNumbers[i] = random.nextInt(bound);
+        Arrays.sort(sortedNumbers);
+        for (int i = 0; i < amountOfNumbers; i++) {
+            case1.insert(sortedNumbers[i]);
+            System.out.println("Inserted:  " + sortedNumbers[i]);
+            case1.showTree();
+        }
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            case1.delete(value);
+            System.out.println("Deleted:  " + value);
+            case1.showTree();
+        }
+
+        System.out.println("XXXXXXXXXXXXXXXX");
+
+        // Case 2
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            case2.insert(value);
+            System.out.println("Inserted:  " + value);
+            case2.showTree();
+        }
+        for (int i = 0; i < amountOfNumbers; i++) {
+            int value = random.nextInt(bound);
+            case2.delete(value);
+            System.out.println("Deleted:  " + value);
+            case2.showTree();
+        }
     }
 }
