@@ -1,10 +1,10 @@
-public class Node {
+public class NodeBST{
     private int value;
-    private Node leftNode;
-    private Node rightNode;
-    private Node parentNode;
+    private NodeBST leftNode;
+    private NodeBST rightNode;
+    private NodeBST parentNode;
 
-    public Node(int value, Node parentNode) {
+    public NodeBST(int value, NodeBST parentNode) {
         this.value = value;
         leftNode = null;
         rightNode = null;
@@ -20,29 +20,30 @@ public class Node {
         this.value = value;
     }
 
-    public Node getLeftNode() {
+    public NodeBST getLeftNode() {
         return leftNode;
     }
 
-    public void setLeftNode(Node leftNode) {
+    public void setLeftNode(NodeBST leftNode) {
         this.leftNode = leftNode;
         if (leftNode != null) leftNode.setParentNode(this);
     }
 
-    public Node getRightNode() {
+    public NodeBST getRightNode() {
         return rightNode;
     }
 
-    public void setRightNode(Node rightNode) {
+
+    public void setRightNode(NodeBST rightNode) {
         this.rightNode = rightNode;
         if (rightNode != null) rightNode.setParentNode(this);
     }
 
-    public Node getParentNode() {
+    public NodeBST getParentNode() {
         return parentNode;
     }
 
-    public void setParentNode(Node parentNode) {
+    public void setParentNode(NodeBST parentNode) {
         this.parentNode = parentNode;
     }
 

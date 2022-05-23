@@ -1,5 +1,5 @@
 public class BST {
-    private Node root;
+    protected NodeBST root;
 
     public BST() {
         root = null;
@@ -7,30 +7,24 @@ public class BST {
 
     public void insert(int value) {
         if (root == null) {
-            root = new Node(value, null);
+            root = new NodeBST(value, null);
             return;
         }
         insertRec(value, root);
     }
 
-    private void insertRec(int value, Node currentNode) {
+    protected void insertRec(int value, NodeBST currentNode) {
         int currentNodeValue = currentNode.getValue();
         if (value == currentNodeValue) {
             System.out.println("Value already in tree!");
         } else if (value < currentNodeValue) {
             if (currentNode.hasLeft()) {
                 insertRec(value, currentNode.getLeftNode());
-            } else {
-                Node newNode = new Node(value, currentNode);
-                currentNode.setLeftNode(newNode);
-            }
+            } else currentNode.setLeftNode(new NodeBST(value, currentNode));
         } else {
             if (currentNode.hasRight()) {
                 insertRec(value, currentNode.getRightNode());
-            } else {
-                Node newNode = new Node(value, currentNode);
-                currentNode.setRightNode(newNode);
-            }
+            } else currentNode.setRightNode(new NodeBST(value, currentNode));
         }
     }
 
@@ -41,48 +35,8 @@ public class BST {
         }
         deleteRec(value, root);
     }
-//    private void deleteRec(int value, Node currentNode, Node parentNode) {
-//        int currentNodeValue = currentNode.getValue();
-//        if (value == currentNodeValue) {
-//            if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
-//            else if (currentNode.hasLeft() || currentNode.hasRight()) delete1(value, currentNode, parentNode);
-//            else delete0(value, parentNode);
-//        } else if (value < currentNodeValue) {
-//            if (!currentNode.hasLeft()) System.out.println("No value found in the tree!");
-//            else deleteRec(value, currentNode.getLeftNode(), currentNode);
-//        } else {
-//            if (!currentNode.hasRight()) System.out.println("No value found in the tree!");
-//            else deleteRec(value, currentNode.getRightNode(), currentNode);
-//        }
-//    }
-//
-//    private void delete0(int value, Node parentNode) {
-//        if (parentNode == null) root = null;
-//        else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) parentNode.setLeftNode(null);
-//        else parentNode.setRightNode(null);
-//    }
-//    private void delete1(int value, Node currentNode, Node parentNode) {
-//        if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) {
-//            if (currentNode.hasLeft()) parentNode.setLeftNode(currentNode.getLeftNode());
-//            else parentNode.setLeftNode(currentNode.getRightNode());
-//        } else {
-//            if (currentNode.hasLeft()) parentNode.setRightNode(currentNode.getLeftNode());
-//            else parentNode.setRightNode(currentNode.getRightNode());
-//        }
-//    }
-//
-//    private void delete2(Node currentNode) {
-//        Node parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
-//        Node maxNode;
-//        if (currentNode == parentOfMax) maxNode = currentNode.getLeftNode();
-//        else maxNode = parentOfMax.getRightNode();
-//        int maxNodeValue = maxNode.getValue();
-//        currentNode.setValue(maxNodeValue);
-//        if (maxNode.hasLeft()) delete1(maxNodeValue, maxNode, parentOfMax);
-//        else delete0(maxNodeValue, parentOfMax);
-//    }
 
-    private void deleteRec(int value, Node currentNode) {
+    private void deleteRec(int value, NodeBST currentNode) {
         int currentNodeValue = currentNode.getValue();
         if (value == currentNodeValue) {
             if (currentNode.hasLeft() && currentNode.hasRight()) delete2(currentNode);
@@ -97,15 +51,15 @@ public class BST {
         }
     }
 
-    private void delete0(int value, Node currentNode) {
-        Node parentNode = currentNode.getParentNode();
+    private void delete0(int value, NodeBST currentNode) {
+        NodeBST parentNode = currentNode.getParentNode();
         if (parentNode == null) root = null;
         else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) parentNode.setLeftNode(null);
         else parentNode.setRightNode(null);
     }
 
-    private void delete1(int value, Node currentNode) {
-        Node parentNode = currentNode.getParentNode();
+    private void delete1(int value, NodeBST currentNode) {
+        NodeBST parentNode = currentNode.getParentNode();
         if (parentNode == null) root = currentNode;
         else if (parentNode.hasLeft() && value == parentNode.getLeftNode().getValue()) {
             if (currentNode.hasLeft()) parentNode.setLeftNode(currentNode.getLeftNode());
@@ -116,18 +70,18 @@ public class BST {
         }
     }
 
-    private void delete2(Node currentNode) {
-        Node parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
-        Node maxNode;
+    private void delete2(NodeBST currentNode) {
+        NodeBST parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
+        NodeBST maxNode;
         if (currentNode == parentOfMax) maxNode = currentNode.getLeftNode();
         else maxNode = parentOfMax.getRightNode();
         int maxNodeValue = maxNode.getValue();
         currentNode.setValue(maxNodeValue);
         if (maxNode.hasLeft()) delete1(maxNodeValue, maxNode);
-        else delete0(maxNodeValue, parentOfMax);
+        else delete0(maxNodeValue, maxNode);
     }
 
-    private Node findParentMax(Node currentNode, Node parentNode) {
+    private NodeBST findParentMax(NodeBST currentNode, NodeBST parentNode) {
         if (currentNode.hasRight()) return findParentMax(currentNode.getRightNode(), currentNode);
         else return parentNode;
     }
@@ -137,7 +91,7 @@ public class BST {
         return calculateHeight(root, 1);
     }
 
-    private int calculateHeight(Node currentNode, int height) {
+    private int calculateHeight(NodeBST currentNode, int height) {
         if (!(currentNode.hasLeft() || currentNode.hasRight())) return height;
 
         int leftHeight = 0, rightHeight = 0;
@@ -151,7 +105,7 @@ public class BST {
         printTree(root, "");
     }
 
-    private void printTree(Node node, String prefix) {
+    private void printTree(NodeBST node, String prefix) {
         if (node == null) return;
 
         System.out.println(prefix + " + " + node.getValue());
@@ -165,18 +119,6 @@ public class BST {
         bst.insert(5);
         bst.insert(3);
         bst.insert(1);
-        bst.insert(7);
-        bst.insert(9);
-        bst.insert(8);
-        bst.insert(11);
-        bst.insert(15);
-        bst.insert(13);
-        bst.insert(14);
-        bst.insert(17);
-        bst.insert(20);
-        bst.insert(18);
-        bst.showTree();
-        bst.delete(12);
         bst.showTree();
     }
 }
