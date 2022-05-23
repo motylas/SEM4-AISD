@@ -13,12 +13,12 @@ public class QuickSort {
     }
     public static void quickSort(int[] array, int p, int q) {
         if (p < q) {
-            System.out.println("Array before: " + Arrays.toString(array));
+            //System.out.println("Array before: " + Arrays.toString(array));
             int pivot = partition(array,p,q);
-            System.out.println("x: " + pivot);
+            //System.out.println("x: " + pivot);
             if (array.length < 50) {
-                //System.out.println("Pivot: " + pivot);
-                System.out.println("Array before recursion: " + Arrays.toString(array));
+                ////System.out.println("Pivot: " + pivot);
+                //System.out.println("Array before recursion: " + Arrays.toString(array));
             }
             quickSort(array, p, pivot);
             quickSort(array, pivot+1, q);
@@ -35,7 +35,7 @@ public class QuickSort {
             }
         }
         int pivot = array[p];
-        System.out.println("Pivot: " + array[p]);
+        //System.out.println("Pivot: " + array[p]);
         int i = p - 1;
         int j = q + 1;
 
@@ -85,25 +85,25 @@ public class QuickSort {
         }
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
 
         quickSort(array, 0, amountOfNumbers - 1);
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
-        System.out.println("Times Compared: " + timesCompared);
-        System.out.println("Times Swapped: " + timesSwapped);
+        //System.out.println("Times Compared: " + timesCompared);
+        //System.out.println("Times Swapped: " + timesSwapped);
 
         int lastNumber = array[0];
         for (int i = 1; i < amountOfNumbers; i++) {
             if (lastNumber > array[i]) {
-                System.out.println("Not sorted!");
+                //System.out.println("Not sorted!");
                 return;
             }
             lastNumber = array[i];
         }
-        System.out.println("Sorted!");
+        //System.out.println("Sorted!");
     }
 }

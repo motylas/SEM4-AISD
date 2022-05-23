@@ -432,6 +432,7 @@ public class GenerateData {
 
                 //Binary Search
                 timesComparedBS[0] = "Mean BinarySearch Comparisons";
+                timeBS[0] = "Mean BinarySearch Times";
                 for (int i = 1000; i <= 100000; i += 1000) {
                     BinarySearch.timesCompared = 0;
                     int[] arrayTemp = new int[i];
@@ -467,12 +468,14 @@ public class GenerateData {
                 cnBS[i / 1000] = String.valueOf(Float.parseFloat(timesComparedBS[i / 1000]) / (float) i);
             }
             dataOutput.add(cnBS);
-            givenDataArray_whenConvertToCSV_thenOutputCreated(dataOutput, "BSONLY: Algorithms for k=", k);
-
+            for (String[] array: dataOutput){
+                for (String string: array){
+                    System.out.print(string + "  ");
+                }
+                System.out.println();
+            }
+            givenDataArray_whenConvertToCSV_thenOutputCreated(dataOutput, "BinarySearch for k=", k);
         }
-
-
-
     }
 
 

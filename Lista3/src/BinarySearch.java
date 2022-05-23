@@ -48,25 +48,25 @@ public class BinarySearch {
         Arrays.sort(array);
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
 
         if(binarySearch(array, 0, amountOfNumbers - 1, v)) System.out.println("FOUND");
         else System.out.println("NOT FOUND");
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
-        System.out.println("Times Compared: " + timesCompared);
+        //System.out.println("Times Compared: " + timesCompared);
 
         int lastNumber = array[0];
         for (int i = 1; i < amountOfNumbers; i++) {
             if (lastNumber > array[i]) {
-                System.out.println("Not sorted!");
+                //System.out.println("Not sorted!");
                 return;
             }
             lastNumber = array[i];
         }
-        System.out.println("Sorted!");
+        //System.out.println("Sorted!");
     }
 }
