@@ -1,78 +1,142 @@
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 public class SBST {
     private NodeBST root;
-    public SBST(){
+    private long comparisonBetweenValues = 0;
+    private long readsAndSwapsOnNodes = 0;
+    private long allHeight = 0;
+    private long maxOperations = 0;
+    private long allOperations = 0;
+    private long currentOperations = 0;
+
+    public SBST() {
         root = null;
     }
-    public SBST(NodeBST root){
+
+    public SBST(NodeBST root) {
         this.root = root;
     }
-    public void insert(int value){
-        if (root == null){
-            root = new NodeBST(value, null);
-            return;
-        }
-        splay(value, root);
-        int rootValue = root.getValue();
-        if (value == rootValue) {
-            System.out.println("Value already in Tree!");
-            return;
-        }
-        NodeBST newNode = new NodeBST(value, null);
-        if (value < rootValue){
-            newNode.setLeftNode(root.getLeftNode());
-            root.setLeftNode(null);
-            newNode.setRightNode(root);
-        }
-        else{
-            newNode.setRightNode(root.getRightNode());
-            root.setRightNode(null);
-            newNode.setLeftNode(root);
-        }
-        root = newNode;
+
+    private void clearValues() {
+        comparisonBetweenValues = 0;
+        readsAndSwapsOnNodes = 0;
+        currentOperations = 0;
     }
 
-    private void splay(int value, NodeBST currentNode){
+    private void returnOperationCalculations() {
+        currentOperations += readsAndSwapsOnNodes + comparisonBetweenValues + 1;
+        if (maxOperations < currentOperations) maxOperations = currentOperations;
+        allOperations += currentOperations;
+    }
+
+    public NodeBST insert(int value) {
+        clearValues();
+        readsAndSwapsOnNodes++; // ==
+        if (root == null) {
+            readsAndSwapsOnNodes++; // =
+            root = new NodeBST(value, null);
+            returnOperationCalculations();
+            return root;
+        }
+        splay(value, root);
+        currentOperations++; // not comparison
+        int rootValue = root.getValue();
+        comparisonBetweenValues++; // ==
+        if (value == rootValue) {
+            returnOperationCalculations();
+            return null;
+        }
+        readsAndSwapsOnNodes++; // =
+        NodeBST newNode = new NodeBST(value, null);
+        comparisonBetweenValues++; // <
+        if (value < rootValue) {
+            readsAndSwapsOnNodes += 3; // set and get
+            newNode.setLeftNode(root.getLeftNode());
+            readsAndSwapsOnNodes += 2; //set
+            root.setLeftNode(null);
+            readsAndSwapsOnNodes += 2; //set
+            newNode.setRightNode(root);
+        } else {
+            readsAndSwapsOnNodes += 3; //set and get
+            newNode.setRightNode(root.getRightNode());
+            readsAndSwapsOnNodes += 2; //set and get
+            root.setRightNode(null);
+            readsAndSwapsOnNodes += 2; //set and get
+            newNode.setLeftNode(root);
+        }
+        readsAndSwapsOnNodes++; // =
+        root = newNode;
+        returnOperationCalculations();
+        return root;
+    }
+
+
+    private void splay(int value, NodeBST currentNode) {
+        currentOperations++; // not comparison
         int currentNodeValue = currentNode.getValue();
-        if (value < currentNodeValue && currentNode.hasLeft())  splay(value, currentNode.getLeftNode());
-        else if (value > currentNodeValue && currentNode.hasRight())     splay(value, currentNode.getRightNode());
-        else{
-            NodeBST parent, grandParent;
-            while (currentNode != root) {
-                parent = currentNode.getParentNode();
-                if (parent == root) {
-                    if (currentNode == parent.getLeftNode()) rightRotation(parent);
-                    else leftRotation(parent);
-                } else {
-                    grandParent = parent.getParentNode();
-                    // Left X Case
-                    if (parent == grandParent.getLeftNode()){
-                        // Left Left Case
-                        if (currentNode == parent.getLeftNode()){
-                            rightRotation(grandParent);
-                            rightRotation(parent);
-                        }
-                        // Left Right Case
-                        else{
-                            leftRotation(parent);
-                            rightRotation(grandParent);
-                        }
+        comparisonBetweenValues++; // <
+        while (true) {
+            currentOperations++; // while
+            comparisonBetweenValues++; // <
+            readsAndSwapsOnNodes++; // hasLeft
+            if (value < currentNodeValue && currentNode.hasLeft()) {
+                readsAndSwapsOnNodes+=2; // = and getLeft
+                currentNode = currentNode.getLeftNode();
+            } else if (value > currentNodeValue && currentNode.hasRight()) {
+                comparisonBetweenValues++; // >
+                readsAndSwapsOnNodes++; // hasRight
+                readsAndSwapsOnNodes+=2; // = and get
+                currentNode = currentNode.getRightNode();
+            } else{
+                // else if
+                comparisonBetweenValues++; // >
+                readsAndSwapsOnNodes++; // hasRight
+                break;
+            }
+        }
+        NodeBST parent, grandParent;
+        while (currentNode != root) {
+            readsAndSwapsOnNodes+=2; // = and get
+            parent = currentNode.getParentNode();
+            readsAndSwapsOnNodes++; // ==
+            if (parent == root) {
+                readsAndSwapsOnNodes+=2; // == and get
+                if (currentNode == parent.getLeftNode()) rightRotation(parent);
+                else leftRotation(parent);
+            } else {
+                readsAndSwapsOnNodes+=2; // = and get
+                grandParent = parent.getParentNode();
+                // Left X Case
+                readsAndSwapsOnNodes+=2; // == and get
+                if (parent == grandParent.getLeftNode()) {
+                    // Left Left Case
+                    readsAndSwapsOnNodes+=2; // == and get
+                    if (currentNode == parent.getLeftNode()) {
+                        rightRotation(grandParent);
+                        rightRotation(parent);
                     }
-                    // Right X case
-                    else{
-                        // Right Left Case
-                        if (currentNode == parent.getLeftNode()){
-                            rightRotation(parent);
-                            leftRotation(grandParent);
-                        }
-                        // Right Right Case
-                        else{
-                            leftRotation(grandParent);
-                            leftRotation(parent);
-                        }
+                    // Left Right Case
+                    else {
+                        leftRotation(parent);
+                        rightRotation(grandParent);
+                    }
+                }
+                // Right X case
+                else {
+                    // Right Left Case
+                    readsAndSwapsOnNodes+=2; // == and get
+                    if (currentNode == parent.getLeftNode()) {
+                        rightRotation(parent);
+                        leftRotation(grandParent);
+                    }
+                    // Right Right Case
+                    else {
+                        leftRotation(grandParent);
+                        leftRotation(parent);
                     }
                 }
             }
@@ -80,89 +144,173 @@ public class SBST {
     }
 
     private void leftRotation(NodeBST currentNode) {
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST parent = currentNode.getParentNode();
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST rightCurrent = currentNode.getRightNode();
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST leftOfRightCurrent = rightCurrent.getLeftNode();
+        currentOperations++; // not a comparison
         int value = currentNode.getValue();
         // Change parent
         // Current node not root
+        readsAndSwapsOnNodes++; // parent !=
         if (parent != null) {
+            readsAndSwapsOnNodes += 2; // hasLeft and get
+            comparisonBetweenValues++; // value ==
             if (parent.hasLeft() && value == parent.getLeftNode().getValue()) {
+                readsAndSwapsOnNodes += 2; // set
                 parent.setLeftNode(rightCurrent);
             } else if (parent.hasRight()) {
+                readsAndSwapsOnNodes++; // hasRight
+                readsAndSwapsOnNodes += 2; //set
                 parent.setRightNode(rightCurrent);
             }
         }
         // Current node root
-        else root = rightCurrent;
+        else {
+            readsAndSwapsOnNodes++; // root =
+            root = rightCurrent;
+        }
+        readsAndSwapsOnNodes += 2; //set
         rightCurrent.setParentNode(parent);
         // Change current node and right child relations
+        readsAndSwapsOnNodes += 2; //set
         currentNode.setParentNode(rightCurrent);
+        readsAndSwapsOnNodes += 2; //set
         rightCurrent.setLeftNode(currentNode);
         // Change left child of rightNode to child of currentNode
+        readsAndSwapsOnNodes += 2; //set
         currentNode.setRightNode(leftOfRightCurrent);
     }
 
     private void rightRotation(NodeBST currentNode) {
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST parent = currentNode.getParentNode();
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST leftCurrent = currentNode.getLeftNode();
+        readsAndSwapsOnNodes += 2; // = and get
         NodeBST rightOfLeftCurrent = leftCurrent.getRightNode();
+        currentOperations++; // not a comparison
         int value = currentNode.getValue();
         // Change parent
+        readsAndSwapsOnNodes++; // parent !=
         if (parent != null) {
+            readsAndSwapsOnNodes += 2; // hasLeft and get
+            comparisonBetweenValues++; // value ==
             if (parent.hasLeft() && value == parent.getLeftNode().getValue()) {
+                readsAndSwapsOnNodes += 2; // set
                 parent.setLeftNode(leftCurrent);
             } else if (parent.hasRight()) {
+                readsAndSwapsOnNodes++; // hasRight
+                readsAndSwapsOnNodes += 2; //set
                 parent.setRightNode(leftCurrent);
             }
-        } else root = leftCurrent;
+        } else {
+            readsAndSwapsOnNodes++; // root =
+            root = leftCurrent;
+        }
+        readsAndSwapsOnNodes += 2; //set
         leftCurrent.setParentNode(parent);
         // Change current node and left child relations
+        readsAndSwapsOnNodes += 2; //set
         currentNode.setParentNode(leftCurrent);
+        readsAndSwapsOnNodes += 2; //set
         leftCurrent.setRightNode(currentNode);
         // Change right child of leftNode to child of currentNode
+        readsAndSwapsOnNodes += 2; //set
         currentNode.setLeftNode(rightOfLeftCurrent);
     }
 
-    public void delete(int value){
-        if (root == null){
-            System.out.println("No value found in the tree!");
-            return;
+    public NodeBST delete(int value) {
+        clearValues();
+        readsAndSwapsOnNodes++; // ==
+        if (root == null) {
+            returnOperationCalculations();
+            return null;
         }
         splay(value, root);
+        currentOperations++; //not a comparison
         int rootValue = root.getValue();
-        if (value != rootValue){
-            System.out.println("No value found in the tree!");
-            return;
+        comparisonBetweenValues++; //!=
+        if (value != rootValue) {
+            returnOperationCalculations();
+            return null;
         }
-        if (root.getLeftNode() == null){
+        readsAndSwapsOnNodes += 2; // get and ==
+        if (root.getLeftNode() == null) {
+            readsAndSwapsOnNodes += 2; // = and get
             root = root.getRightNode();
-            return;
+            readsAndSwapsOnNodes+=2; // set
+            root.setParentNode(null);
+            returnOperationCalculations();
+            return root;
         }
+        readsAndSwapsOnNodes += 2; // = and get
         SBST tree1 = new SBST(root.getLeftNode());
+        readsAndSwapsOnNodes += 2; // = and get
         SBST tree2 = new SBST(root.getRightNode());
+        readsAndSwapsOnNodes += 2; // set
         tree1.root.setParentNode(null);
-        if (tree2.root != null) tree2.root.setParentNode(null);
+        readsAndSwapsOnNodes++; //!=
+        if (tree2.root != null) {
+            readsAndSwapsOnNodes += 2; //set
+            tree2.root.setParentNode(null);
+        }
+        readsAndSwapsOnNodes++; // =
         root = null;
         tree1.splay(value, tree1.root);
+        readsAndSwapsOnNodes += tree1.getReadsAndSwapsOnNodes();
+        comparisonBetweenValues += tree1.getComparisonBetweenValues();
+        currentOperations += tree1.getCurrentOperations();
+        tree1.readsAndSwapsOnNodes = 0;
+        tree1.comparisonBetweenValues = 0;
+        tree1.currentOperations = 0;
+        readsAndSwapsOnNodes += 2; // set
         tree1.root.setRightNode(tree2.root);
+        readsAndSwapsOnNodes++; // =
         root = tree1.root;
+        returnOperationCalculations();
+        return root;
     }
 
-    public int getHeight() {
-        if (root == null) return 0;
-        return calculateHeight(root, 1);
+    int treeHeight() {
+        NodeBST node = root;
+        // Base Case
+        if (node == null)
+            return 0;
+
+        // Create an empty queue for level order traversal
+        Queue<NodeBST> q = new LinkedList();
+
+        // Enqueue Root and initialize height
+        q.add(node);
+        int height = 0;
+
+        while (true)
+        {
+            // nodeCount (queue size) indicates number of nodes
+            // at current level.
+            int nodeCount = q.size();
+            if (nodeCount == 0)
+                return height;
+            height++;
+
+            // Dequeue all nodes of current level and Enqueue all
+            // nodes of next level
+            while (nodeCount > 0)
+            {
+                NodeBST newnode = q.peek();
+                q.remove();
+                if (newnode.getLeftNode() != null)
+                    q.add(newnode.getLeftNode());
+                if (newnode.getRightNode() != null)
+                    q.add(newnode.getRightNode());
+                nodeCount--;
+            }
+        }
     }
 
-    private int calculateHeight(NodeBST currentNode, int height) {
-        if (!(currentNode.hasLeft() || currentNode.hasRight())) return height;
-
-        int leftHeight = 0, rightHeight = 0;
-        if (currentNode.hasLeft()) leftHeight = calculateHeight(currentNode.getLeftNode(), ++height);
-        if (currentNode.hasRight()) rightHeight = calculateHeight(currentNode.getRightNode(), ++height);
-
-        return Math.max(leftHeight, rightHeight);
-    }
     public void showTree() {
         printTree(root, "");
     }
@@ -194,15 +342,23 @@ public class SBST {
         for (int i = 0; i < amountOfNumbers; i++) sortedNumbers[i] = random.nextInt(bound);
         Arrays.sort(sortedNumbers);
         for (int i = 0; i < amountOfNumbers; i++) {
-            case1.insert(sortedNumbers[i]);
-            //System.out.println("Inserted:  " + sortedNumbers[i]);
-            //case1.showTree();
+            NodeBST temp = case1.insert(sortedNumbers[i]);
+            if (amountOfNumbers > 50) continue;
+            if (temp == null) System.out.println("Value already exist in tree");
+            else {
+                System.out.println("Inserted:  " + sortedNumbers[i]);
+                case1.showTree();
+            }
         }
         for (int i = 0; i < amountOfNumbers; i++) {
             int value = random.nextInt(bound);
-            case1.delete(value);
-            //System.out.println("Deleted:  " + value);
-            //case1.showTree();
+            NodeBST temp = case1.delete(value);
+            if (amountOfNumbers > 50) continue;
+            if (temp == null) System.out.println("No value found in tree");
+            else {
+                System.out.println("Deleted:  " + value);
+                case1.showTree();
+            }
         }
 
         System.out.println("XXXXXXXXXXXXXXXX");
@@ -210,15 +366,43 @@ public class SBST {
         // Case 2
         for (int i = 0; i < amountOfNumbers; i++) {
             int value = random.nextInt(bound);
-            case2.insert(value);
-            //System.out.println("Inserted:  " + value);
-            //case2.showTree();
+            NodeBST temp = case2.insert(value);
+            if (amountOfNumbers > 50) continue;
+            if (temp == null) System.out.println("Value already exist in tree");
+            else {
+                System.out.println("Inserted:  " + value);
+                case2.showTree();
+            }
         }
         for (int i = 0; i < amountOfNumbers; i++) {
             int value = random.nextInt(bound);
-            case2.delete(value);
-            //System.out.println("Deleted:  " + value);
-            //case2.showTree();
+            NodeBST temp = case2.delete(value);
+            if (amountOfNumbers > 50) continue;
+            if (temp == null) System.out.println("No value found in tree");
+            else {
+                System.out.println("Deleted:  " + value);
+                case2.showTree();
+            }
         }
+    }
+
+    public long getComparisonBetweenValues() {
+        return comparisonBetweenValues;
+    }
+
+    public long getReadsAndSwapsOnNodes() {
+        return readsAndSwapsOnNodes;
+    }
+
+    public long getCurrentOperations() {
+        return currentOperations;
+    }
+
+    public long getAllOperations() {
+        return allOperations;
+    }
+
+    public long getMaxOperations() {
+        return maxOperations;
     }
 }
