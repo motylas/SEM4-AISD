@@ -16,8 +16,8 @@ public class DualPivotQuickSort {
         if (p < q) {
             int[] pivots = partition(array, p, q);
             if(array.length < 50){
-                System.out.println("Pivots: " + pivots[0] + ", " + pivots[1]);
-                System.out.println("Array before recursion: " + Arrays.toString(array));
+                //System.out.println("Pivots: " + pivots[0] + ", " + pivots[1]);
+                //System.out.println("Array before recursion: " + Arrays.toString(array));
             }
             dualPivotQuickSort(array, p, pivots[0] - 1);
             dualPivotQuickSort(array, pivots[0] + 1, pivots[1] - 1);
@@ -110,25 +110,25 @@ public class DualPivotQuickSort {
         }
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
 
         dualPivotQuickSort(array, 0, amountOfNumbers - 1);
 
         if (amountOfNumbers < 50) {
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
-        System.out.println("Times Compared: " + timesCompared);
-        System.out.println("Times Swapped: " + timesSwapped);
+        //System.out.println("Times Compared: " + timesCompared);
+        //System.out.println("Times Swapped: " + timesSwapped);
 
         int lastNumber = array[0];
         for (int i = 1; i < amountOfNumbers; i++) {
             if (lastNumber > array[i]) {
-                System.out.println("Not sorted!");
+                //System.out.println("Not sorted!");
                 return;
             }
             lastNumber = array[i];
         }
-        System.out.println("Sorted!");
+        //System.out.println("Sorted!");
     }
 }

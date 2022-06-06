@@ -41,17 +41,17 @@ public class MergeSort {
         }
 
         if (amountOfNumbers < 50 && amountOfNumbers != 0) {
-//            System.out.println("Left Array: " + Arrays.toString(leftArray));
-//            System.out.println("Right Array: " + Arrays.toString(rightArray));
-            System.out.println("Merge:" + Arrays.toString(array));
+//            //System.out.println("Left Array: " + Arrays.toString(leftArray));
+//            //System.out.println("Right Array: " + Arrays.toString(rightArray));
+            //System.out.println("Merge:" + Arrays.toString(array));
         }
     }
 
 //    public static void main(String[] args) throws IOException {
-//        //System.out.println(Arrays.toString(array));
+//        ////System.out.println(Arrays.toString(array));
 //        mergeSort(array);
 //        mergeSort(array2);
-//        //System.out.println(Arrays.toString(array));
+//        ////System.out.println(Arrays.toString(array));
 //
 //        String[] strArray = new String[array.length];
 //        String[] strArray2 = new String[array.length];
@@ -61,8 +61,8 @@ public class MergeSort {
 //            strArray2[i] = String.valueOf(array2[i]);
 //        }
 //
-//        System.out.println(Arrays.toString(strArray));
-//        System.out.println(Arrays.toString(strArray2));
+//        //System.out.println(Arrays.toString(strArray));
+//        //System.out.println(Arrays.toString(strArray2));
 //
 //
 //        List<String[]> dataLines = new ArrayList<>();
@@ -98,25 +98,25 @@ public class MergeSort {
         }
 
         if (amountOfNumbers < 50){
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
 
         mergeSort(array);
 
         if (amountOfNumbers < 50){
-            System.out.println(Arrays.toString(array));
+            //System.out.println(Arrays.toString(array));
         }
-        System.out.println("Times Compared: " + timesCompared);
-        System.out.println("Times Swapped: " + timesSwapped);
+        //System.out.println("Times Compared: " + timesCompared);
+        //System.out.println("Times Swapped: " + timesSwapped);
 
         int lastNumber = array[0];
         for (int i = 1; i<amountOfNumbers;i++){
             if (lastNumber > array[i]){
-                System.out.println("Not sorted!");
+                //System.out.println("Not sorted!");
                 return;
             }
             lastNumber = array[i];
         }
-        System.out.println("Sorted!");
+        //System.out.println("Sorted!");
     }
 }
