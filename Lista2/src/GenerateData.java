@@ -32,6 +32,8 @@ public class GenerateData {
         String[] timesComparedDual = new String[11];
         String[] timesSwappedHybrid = new String[11];
         String[] timesComparedHybrid = new String[11];
+        String[] timesSwappedHeap = new String[11];
+        String[] timesComparedHeap = new String[11];
         meanTimes.add(timesSwappedMerge);
         meanTimes.add(timesComparedMerge);
         meanTimes.add(timesSwappedInsertion);
@@ -42,6 +44,8 @@ public class GenerateData {
         meanTimes.add(timesComparedDual);
         meanTimes.add(timesSwappedHybrid);
         meanTimes.add(timesComparedHybrid);
+        meanTimes.add(timesSwappedHeap);
+        meanTimes.add(timesComparedHeap);
 
 
         for (int test = 0; test < k; test++) {
@@ -172,6 +176,28 @@ public class GenerateData {
                 timesComparedHybrid[i / 100] = String.valueOf(timeTemp);
             }
 
+            //Heap Sort
+            timesSwappedHeap[0] = "Mean HeapSort Swaps";
+            timesComparedHeap[0] = "Mean HeapSort Comparisons";
+            for (int i = 100; i <= 1000; i += 100) {
+                HeapSort.timesSwapped = 0;
+                HeapSort.timesCompared = 0;
+                int[] arrayTemp = new int[i];
+                for (int j = 0; j < arrays.get(i / 100 - 1).length; j++) {
+                    arrayTemp[j] = arrays.get(i / 100 - 1)[j];
+                }
+                HeapSort.heapSort(arrayTemp);
+                int timeTemp;
+                if (timesSwappedHeap[i / 100] == null) timeTemp = 0;
+                else timeTemp = Integer.parseInt(timesSwappedHeap[i / 100]);
+                timeTemp += HeapSort.timesSwapped;
+                timesSwappedHeap[i / 100] = String.valueOf(timeTemp);
+                if (timesComparedHeap[i / 100] == null) timeTemp = 0;
+                else timeTemp = Integer.parseInt(timesComparedHeap[i / 100]);
+                timeTemp += HeapSort.timesCompared;
+                timesComparedHeap[i / 100] = String.valueOf(timeTemp);
+            }
+
         }
         for (String[] oneLine : meanTimes) {
             for (int i = 1; i < oneLine.length; i++) {
@@ -186,12 +212,14 @@ public class GenerateData {
         String[] cnQuick = new String[11];
         String[] cnDual = new String[11];
         String[] cnHybrid = new String[11];
+        String[] cnHeap = new String[11];
         String[] snMerge = new String[11];
         String[] snInsertion = new String[11];
         String[] snQuick = new String[11];
         String[] snDual = new String[11];
         String[] snHybrid = new String[11];
-        for (int j = 0; j < 10; j++) {
+        String[] snHeap = new String[11];
+        for (int j = 0; j < 12; j++) {
             for (int i = 100; i <= 1000; i += 100) {
                 switch (j) {
                     case 0:
@@ -234,6 +262,14 @@ public class GenerateData {
                         cnHybrid[0] = "Mean Lista2.QuickSort Comparisons / N";
                         cnHybrid[i/100] = String.valueOf(Float.parseFloat(timesComparedHybrid[i/100]) / (float) i);
                         break;
+                    case 10:
+                        snHeap[0] = "Mean HeapSort Comparisons / N";
+                        snHeap[i/100] = String.valueOf(Float.parseFloat(timesSwappedHeap[i/100]) / (float) i);
+                        break;
+                    case 11:
+                        cnHeap[0] = "Mean HeapSort Comparisons / N";
+                        cnHeap[i/100] = String.valueOf(Float.parseFloat(timesComparedHeap[i/100]) / (float) i);
+                        break;
                 }
             }
         }
@@ -247,6 +283,8 @@ public class GenerateData {
         dataOutput.add(cnDual);
         dataOutput.add(snHybrid);
         dataOutput.add(cnHybrid);
+        dataOutput.add(snHeap);
+        dataOutput.add(cnHeap);
 
         givenDataArray_whenConvertToCSV_thenOutputCreated(dataOutput, "Algorithms for k=", k);
     }
