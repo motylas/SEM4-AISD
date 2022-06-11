@@ -96,6 +96,7 @@ public class GenerateData {
                 long bstAverageHeight = 0;
                 long rbbstAverageHeight = 0;
                 long sbstAverageHeight = 0;
+                int operationsSuccessful = 0;
 
                 // Insertion sorted array
                 if (scenario == 1) {
@@ -106,9 +107,14 @@ public class GenerateData {
 
                     // Insertion
                     for (int i = 0; i < n; i++) {
-                        bstTree.insert(sortedNumbers[i]);
                         rbbstTree.insert(sortedNumbers[i]);
                         sbstTree.insert(sortedNumbers[i]);
+                        if (null != bstTree.insert(sortedNumbers[i])){
+                            bstAverageHeight += bstTree.treeHeight();
+                            rbbstAverageHeight += rbbstTree.treeHeight();
+                            sbstAverageHeight += sbstTree.treeHeight();
+                            operationsSuccessful++;
+                        }
 
                         bstValueComparisons += bstTree.getComparisonBetweenValues();
                         rbbstValueComparisons += rbbstTree.getComparisonBetweenValues();
@@ -116,18 +122,20 @@ public class GenerateData {
                         bstReadAndSwapsNodes += bstTree.getReadsAndSwapsOnNodes();
                         rbbstReadAndSwapsNodes += rbbstTree.getReadsAndSwapsOnNodes();
                         sbstReadAndSwapsNodes += sbstTree.getReadsAndSwapsOnNodes();
-                        bstAverageHeight += bstTree.treeHeight();
-                        rbbstAverageHeight += rbbstTree.treeHeight();
-                        sbstAverageHeight += sbstTree.treeHeight();
                     }
                 }
                 // Insertion random values
                 else {
                     for (int i = 0; i < n; i++) {
                         int value = random.nextInt(bound);
-                        bstTree.insert(value);
                         rbbstTree.insert(value);
                         sbstTree.insert(value);
+                        if (null != bstTree.insert(value)){
+                            bstAverageHeight += bstTree.treeHeight();
+                            rbbstAverageHeight += rbbstTree.treeHeight();
+                            sbstAverageHeight += sbstTree.treeHeight();
+                            operationsSuccessful++;
+                        }
 
                         bstValueComparisons += bstTree.getComparisonBetweenValues();
                         rbbstValueComparisons += rbbstTree.getComparisonBetweenValues();
@@ -135,9 +143,7 @@ public class GenerateData {
                         bstReadAndSwapsNodes += bstTree.getReadsAndSwapsOnNodes();
                         rbbstReadAndSwapsNodes += rbbstTree.getReadsAndSwapsOnNodes();
                         sbstReadAndSwapsNodes += sbstTree.getReadsAndSwapsOnNodes();
-                        bstAverageHeight += bstTree.treeHeight();
-                        rbbstAverageHeight += rbbstTree.treeHeight();
-                        sbstAverageHeight += sbstTree.treeHeight();
+
                     }
                 }
                 // Maximum heights
@@ -151,6 +157,12 @@ public class GenerateData {
                     bstTree.delete(value);
                     rbbstTree.delete(value);
                     sbstTree.delete(value);
+                    if (null != bstTree.delete(value)){
+                        bstAverageHeight += bstTree.treeHeight();
+                        rbbstAverageHeight += rbbstTree.treeHeight();
+                        sbstAverageHeight += sbstTree.treeHeight();
+                        operationsSuccessful++;
+                    }
 
                     bstValueComparisons += bstTree.getComparisonBetweenValues();
                     rbbstValueComparisons += rbbstTree.getComparisonBetweenValues();
@@ -158,9 +170,7 @@ public class GenerateData {
                     bstReadAndSwapsNodes += bstTree.getReadsAndSwapsOnNodes();
                     rbbstReadAndSwapsNodes += rbbstTree.getReadsAndSwapsOnNodes();
                     sbstReadAndSwapsNodes += sbstTree.getReadsAndSwapsOnNodes();
-                    bstAverageHeight += bstTree.treeHeight();
-                    rbbstAverageHeight += rbbstTree.treeHeight();
-                    sbstAverageHeight += sbstTree.treeHeight();
+
                 }
 
                 // Store data in arrays
@@ -197,15 +207,15 @@ public class GenerateData {
                 // Average Height
                 if (BSTAverageHeight[n / 10000] == null) temp = 0;
                 else temp = Long.parseLong(BSTAverageHeight[n / 10000]);
-                temp += (bstAverageHeight / n);
+                temp += (bstAverageHeight / operationsSuccessful);
                 BSTAverageHeight[n / 10000] = String.valueOf(temp);
                 if (RBBSTAverageHeight[n / 10000] == null) temp = 0;
                 else temp = Long.parseLong(RBBSTAverageHeight[n / 10000]);
-                temp += (rbbstAverageHeight / n);
+                temp += (rbbstAverageHeight / operationsSuccessful);
                 RBBSTAverageHeight[n / 10000] = String.valueOf(temp);
                 if (SBSTAverageHeight[n / 10000] == null) temp = 0;
                 else temp = Long.parseLong(SBSTAverageHeight[n / 10000]);
-                temp += (sbstAverageHeight / n);
+                temp += (sbstAverageHeight / operationsSuccessful);
                 SBSTAverageHeight[n / 10000] = String.valueOf(temp);
 
                 // Max keys
