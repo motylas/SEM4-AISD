@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class GenerateData {
 
     static private final int numberOfTests = 20;
-    static private final int scenario = 1;
+    static private final int scenario = 2;
     static private final Random random = new Random();
 
 
@@ -30,12 +30,15 @@ public class GenerateData {
         String[] BSTAverageHeight = new String[11];
         String[] RBBSTAverageHeight = new String[11];
         String[] SBSTAverageHeight = new String[11];
-        String[] BSTAverageCost = new String[11];
-        String[] RBBSTAverageCost = new String[11];
-        String[] SBSTAverageCost = new String[11];
-        String[] BSTMaxCost = new String[11];
-        String[] RBBSTMaxCost = new String[11];
-        String[] SBSTMaxCost = new String[11];
+        String[] BSTMAXValueComparisons = new String[11];
+        String[] RBBSTMAXValueComparisons = new String[11];
+        String[] SBSTMAXValueComparisons = new String[11];
+        String[] BSTMAXNodesComparisons = new String[11];
+        String[] RBBSTMAXNodesComparisons = new String[11];
+        String[] SBSTMAXNodesComparisons = new String[11];
+        String[] BSTMAXHeight = new String[11];
+        String[] RBBSTMAXHeight = new String[11];
+        String[] SBSTMAXHeight = new String[11];
         meanValues.add(BSTValueComparisons);
         meanValues.add(RBBSTValueComparisons);
         meanValues.add(SBSTValueComparisons);
@@ -45,13 +48,15 @@ public class GenerateData {
         meanValues.add(BSTAverageHeight);
         meanValues.add(RBBSTAverageHeight);
         meanValues.add(SBSTAverageHeight);
-        meanValues.add(BSTAverageCost);
-        meanValues.add(RBBSTAverageCost);
-        meanValues.add(SBSTAverageCost);
-        meanValues.add(BSTMaxCost);
-        meanValues.add(RBBSTMaxCost);
-        meanValues.add(SBSTMaxCost);
-
+        meanValues.add(BSTMAXValueComparisons);
+        meanValues.add(RBBSTMAXValueComparisons);
+        meanValues.add(SBSTMAXValueComparisons);
+        meanValues.add(BSTMAXNodesComparisons);
+        meanValues.add(RBBSTMAXNodesComparisons);
+        meanValues.add(SBSTMAXNodesComparisons);
+        meanValues.add(BSTMAXHeight);
+        meanValues.add(RBBSTMAXHeight);
+        meanValues.add(SBSTMAXHeight);
         BSTValueComparisons[0] = "BST Keys Comparisons";
         RBBSTValueComparisons[0] = "RBBST Keys Comparisons";
         SBSTValueComparisons[0] = "SBST Keys Comparisons";
@@ -61,12 +66,15 @@ public class GenerateData {
         BSTAverageHeight[0] = "BST Average Height";
         RBBSTAverageHeight[0] = "RBBST Average Height";
         SBSTAverageHeight[0] = "SBST Average Height";
-        BSTAverageCost[0] = "BST Average Cost For Single Operation";
-        RBBSTAverageCost[0] = "RBBST Average Cost For Single Operation";
-        SBSTAverageCost[0] = "SBST Average Cost For Single Operation";
-        BSTMaxCost[0] = "BST Maximum Cost For Single Operation";
-        RBBSTMaxCost[0] = "RBBST Maximum Cost For Single Operation";
-        SBSTMaxCost[0] = "SBST Maximum Cost For Single Operation";
+        BSTMAXValueComparisons[0] = "BST MAX Keys Comparison";
+        RBBSTMAXValueComparisons[0] = "RBBST MAX Keys Comparison";
+        SBSTMAXValueComparisons[0] = "SBST MAX Keys Comparison";
+        BSTMAXNodesComparisons[0] = "BST MAX Read and Swap Nodes";
+        RBBSTMAXNodesComparisons[0] = "RBBST MAX Read and Swap Nodes";
+        SBSTMAXNodesComparisons[0] = "SBST MAX Read and Swap Nodes";
+        BSTMAXHeight[0] = "BST MAX Height";
+        RBBSTMAXHeight[0] = "RBBST MAX Height";
+        SBSTMAXHeight[0] = "SBST MAX Height";
 
         for (int test = 0; test < numberOfTests; test++) {
             for (int n = 10000; n <= 100000; n+=10000) {
@@ -132,6 +140,10 @@ public class GenerateData {
                         sbstAverageHeight += sbstTree.treeHeight();
                     }
                 }
+                // Maximum heights
+                long bstMAXHeight = bstTree.treeHeight();
+                long rbbstMAXHeight = rbbstTree.treeHeight();
+                long sbstMAXHeight = sbstTree.treeHeight();
 
                 // Deletion
                 for (int i = 0; i < n; i++) {
@@ -154,75 +166,89 @@ public class GenerateData {
                 // Store data in arrays
                 long temp;
 
-                // Keys
+                // Average Keys
                 if (BSTValueComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(BSTValueComparisons[n / 10000]);
+                else temp = Long.parseLong(BSTValueComparisons[n / 10000]);
                 temp += bstValueComparisons;
                 BSTValueComparisons[n / 10000] = String.valueOf(temp);
                 if (RBBSTValueComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(RBBSTValueComparisons[n / 10000]);
+                else temp = Long.parseLong(RBBSTValueComparisons[n / 10000]);
                 temp += rbbstValueComparisons;
                 RBBSTValueComparisons[n / 10000] = String.valueOf(temp);
                 if (SBSTValueComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(SBSTValueComparisons[n / 10000]);
+                else temp = Long.parseLong(SBSTValueComparisons[n / 10000]);
                 temp += sbstValueComparisons;
                 SBSTValueComparisons[n / 10000] = String.valueOf(temp);
 
-                // Read and Swap Nodes
+                // Average Read and Swap Nodes
                 if (BSTNodesComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(BSTNodesComparisons[n / 10000]);
+                else temp = Long.parseLong(BSTNodesComparisons[n / 10000]);
                 temp += bstReadAndSwapsNodes;
                 BSTNodesComparisons[n / 10000] = String.valueOf(temp);
                 if (RBBSTNodesComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(RBBSTNodesComparisons[n / 10000]);
+                else temp = Long.parseLong(RBBSTNodesComparisons[n / 10000]);
                 temp += rbbstReadAndSwapsNodes;
                 RBBSTNodesComparisons[n / 10000] = String.valueOf(temp);
                 if (SBSTNodesComparisons[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(SBSTNodesComparisons[n / 10000]);
+                else temp = Long.parseLong(SBSTNodesComparisons[n / 10000]);
                 temp += sbstReadAndSwapsNodes;
                 SBSTNodesComparisons[n / 10000] = String.valueOf(temp);
 
                 // Average Height
                 if (BSTAverageHeight[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(BSTAverageHeight[n / 10000]);
+                else temp = Long.parseLong(BSTAverageHeight[n / 10000]);
                 temp += (bstAverageHeight / n);
                 BSTAverageHeight[n / 10000] = String.valueOf(temp);
                 if (RBBSTAverageHeight[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(RBBSTAverageHeight[n / 10000]);
+                else temp = Long.parseLong(RBBSTAverageHeight[n / 10000]);
                 temp += (rbbstAverageHeight / n);
                 RBBSTAverageHeight[n / 10000] = String.valueOf(temp);
                 if (SBSTAverageHeight[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(SBSTAverageHeight[n / 10000]);
+                else temp = Long.parseLong(SBSTAverageHeight[n / 10000]);
                 temp += (sbstAverageHeight / n);
                 SBSTAverageHeight[n / 10000] = String.valueOf(temp);
 
-                // Average Cost Of Single Operations
-                if (BSTAverageCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(BSTAverageCost[n / 10000]);
-                temp += (bstTree.getAllOperations() / n);
-                BSTAverageCost[n / 10000] = String.valueOf(temp);
-                if (RBBSTAverageCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(RBBSTAverageCost[n / 10000]);
-                temp += (rbbstTree.getAllOperations() / n);
-                RBBSTAverageCost[n / 10000] = String.valueOf(temp);
-                if (SBSTAverageCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(SBSTAverageCost[n / 10000]);
-                temp += (sbstTree.getAllOperations() / n);
-                SBSTAverageCost[n / 10000] = String.valueOf(temp);
+                // Max keys
+                if (BSTMAXValueComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(BSTMAXValueComparisons[n / 10000]);
+                temp += bstTree.getMAXcomparisonBetweenValues();
+                BSTMAXValueComparisons[n / 10000] = String.valueOf(temp);
+                if (RBBSTMAXValueComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(RBBSTMAXValueComparisons[n / 10000]);
+                temp += rbbstTree.getMAXcomparisonBetweenValues();
+                RBBSTMAXValueComparisons[n / 10000] = String.valueOf(temp);
+                if (SBSTMAXValueComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(SBSTMAXValueComparisons[n / 10000]);
+                temp += sbstTree.getMAXcomparisonBetweenValues();
+                SBSTMAXValueComparisons[n / 10000] = String.valueOf(temp);
 
-                // Max Cost Of Single Operation
-                if (BSTMaxCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(BSTMaxCost[n / 10000]);
-                temp += bstTree.getMaxOperations();
-                BSTMaxCost[n / 10000] = String.valueOf(temp);
-                if (RBBSTMaxCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(RBBSTMaxCost[n / 10000]);
-                temp += rbbstTree.getMaxOperations();
-                RBBSTMaxCost[n / 10000] = String.valueOf(temp);
-                if (SBSTMaxCost[n / 10000] == null) temp = 0;
-                else temp = Integer.parseInt(SBSTMaxCost[n / 10000]);
-                temp += sbstTree.getMaxOperations();
-                SBSTMaxCost[n / 10000] = String.valueOf(temp);
+                // Max Read and Swaps Nodes
+                if (BSTMAXNodesComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(BSTMAXNodesComparisons[n / 10000]);
+                temp += bstTree.getMAXreadsAndSwapsOnNodes();
+                BSTMAXNodesComparisons[n / 10000] = String.valueOf(temp);
+                if (RBBSTMAXNodesComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(RBBSTMAXNodesComparisons[n / 10000]);
+                temp += rbbstTree.getMAXreadsAndSwapsOnNodes();
+                RBBSTMAXNodesComparisons[n / 10000] = String.valueOf(temp);
+                if (SBSTMAXNodesComparisons[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(SBSTMAXNodesComparisons[n / 10000]);
+                temp += sbstTree.getMAXreadsAndSwapsOnNodes();
+                SBSTMAXNodesComparisons[n / 10000] = String.valueOf(temp);
+
+                // Max Height
+                if (BSTMAXHeight[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(BSTMAXHeight[n / 10000]);
+                temp += bstMAXHeight;
+                BSTMAXHeight[n / 10000] = String.valueOf(temp);
+                if (RBBSTMAXHeight[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(RBBSTMAXHeight[n / 10000]);
+                temp += rbbstMAXHeight;
+                RBBSTMAXHeight[n / 10000] = String.valueOf(temp);
+                if (SBSTMAXHeight[n / 10000] == null) temp = 0;
+                else temp = Long.parseLong(SBSTMAXHeight[n / 10000]);
+                temp += sbstMAXHeight;
+                SBSTMAXHeight[n / 10000] = String.valueOf(temp);
 
             }
         }

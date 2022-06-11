@@ -7,11 +7,9 @@ import java.util.Random;
 public class BST {
     private NodeBST root;
     private long comparisonBetweenValues = 0;
+    private long MAXcomparisonBetweenValues = 0;
     private long readsAndSwapsOnNodes = 0;
-    private long allHeight = 0;
-    private long maxOperations = 0;
-    private long allOperations = 0;
-    private long currentOperations = 0;
+    private long MAXreadsAndSwapsOnNodes = 0;
 
     public BST() {
         root = null;
@@ -26,26 +24,25 @@ public class BST {
             returnOperationCalculations();
             return root;
         }
-        currentOperations++;
         return insertRec(value, root);
     }
 
     private void clearValues() {
         comparisonBetweenValues = 0;
         readsAndSwapsOnNodes = 0;
-        currentOperations = 0;
     }
 
     private void returnOperationCalculations() {
-        currentOperations += readsAndSwapsOnNodes + comparisonBetweenValues +1;
-        if (maxOperations < currentOperations) maxOperations = currentOperations;
-        allOperations += currentOperations;
+        if (readsAndSwapsOnNodes > MAXreadsAndSwapsOnNodes){
+            MAXreadsAndSwapsOnNodes = readsAndSwapsOnNodes;
+        }
+        if (comparisonBetweenValues > MAXcomparisonBetweenValues){
+            MAXcomparisonBetweenValues = comparisonBetweenValues;
+        }
     }
 
     private NodeBST insertRec(int value, NodeBST currentNode) {
         while (true) {
-            currentOperations++; //while check
-            currentOperations++; //not a comparison
             int currentNodeValue = currentNode.getValue();
             comparisonBetweenValues++; // value ==
             if (value == currentNodeValue){
@@ -89,30 +86,24 @@ public class BST {
             returnOperationCalculations();
             return null;
         }
-        currentOperations++;
         return deleteRec(value, root);
     }
 
     private NodeBST deleteRec(int value, NodeBST currentNode) {
         while (true) {
-            currentOperations++; // while true
-            currentOperations++; // not a comparison
             int currentNodeValue = currentNode.getValue();
             comparisonBetweenValues++; // value ==
             if (value == currentNodeValue) {
                 readsAndSwapsOnNodes+=2; // hasLeft, hasRight
                 if (currentNode.hasLeft() && currentNode.hasRight()){
-                    currentOperations++; //delete
                     delete2(currentNode);
                 }
                 else if (currentNode.hasLeft() || currentNode.hasRight()){
                     readsAndSwapsOnNodes+=2; //hasLeft hasRight
-                    currentOperations++; //delete
                     delete1(value, currentNode);
                 }
                 else{
                     readsAndSwapsOnNodes+=2; //else if above
-                    currentOperations++; // delete;
                     delete0(value, currentNode);
                 }
                 returnOperationCalculations();
@@ -203,7 +194,6 @@ public class BST {
     private void delete2(NodeBST currentNode) {
         readsAndSwapsOnNodes+=2; // parent = and getLeft
         NodeBST parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
-        currentOperations++;
         NodeBST maxNode;
         readsAndSwapsOnNodes++; // currentNode ==
         if (currentNode == parentOfMax){
@@ -214,17 +204,14 @@ public class BST {
             readsAndSwapsOnNodes+=2; //maxNode = and getRight
             maxNode = parentOfMax.getRightNode();
         }
-        currentOperations++; // not comparison
         int maxNodeValue = maxNode.getValue();
         readsAndSwapsOnNodes+=2; //set
         currentNode.setValue(maxNodeValue);
         readsAndSwapsOnNodes++; // hasLeft
         if (maxNode.hasLeft()){
-            currentOperations++;
             delete1(maxNodeValue, maxNode);
         }
         else {
-            currentOperations++;
             delete0(maxNodeValue, maxNode);
         }
     }
@@ -236,7 +223,6 @@ public class BST {
             return findParentMax(currentNode.getRightNode(), currentNode);
         }
         else{
-            currentOperations++;
             return parentNode;
         }
     }
@@ -301,6 +287,8 @@ public class BST {
 
         BST case1 = new BST();
         BST case2 = new BST();
+        long inserted = 0;
+        long allHeight = 0;
 
         // Sorted array, case1
         int[] sortedNumbers = new int[amountOfNumbers];
@@ -310,6 +298,10 @@ public class BST {
         Arrays.sort(sortedNumbers);
         for (int i = 0; i < amountOfNumbers; i++) {
             NodeBST temp = case1.insert(sortedNumbers[i]);
+            if (temp != null){
+                allHeight += case1.treeHeight();
+                inserted++;
+            }
             if (amountOfNumbers > 50) continue;
             if (temp == null) System.out.println("Value already exist in tree");
             else{
@@ -317,6 +309,7 @@ public class BST {
                 case1.showTree();
             }
         }
+        int maxHeight = case1.treeHeight();
         for (int i = 0; i < amountOfNumbers; i++) {
             int value = random.nextInt(bound);
             NodeBST temp = case1.delete(value);
@@ -327,13 +320,16 @@ public class BST {
                 case1.showTree();
             }
         }
-
         System.out.println("XXXXXXXXXXXXXXXX");
 
         // Case 2
         for (int i = 0; i < amountOfNumbers; i++) {
             int value = random.nextInt(bound);
             NodeBST temp = case2.insert(value);
+            if (temp != null){
+                allHeight += case1.treeHeight();
+                inserted++;
+            }
             if (amountOfNumbers > 50) continue;
             if (temp == null) System.out.println("Value already exist in tree");
             else{
@@ -351,6 +347,9 @@ public class BST {
                 case2.showTree();
             }
         }
+        System.out.println("Max height = " + maxHeight);
+        System.out.println("Average height = " + allHeight/inserted);
+        System.out.println("Inserted = " + inserted);
     }
 
     public long getComparisonBetweenValues() {
@@ -361,11 +360,11 @@ public class BST {
         return readsAndSwapsOnNodes;
     }
 
-    public long getAllOperations() {
-        return allOperations;
+    public long getMAXcomparisonBetweenValues() {
+        return MAXcomparisonBetweenValues;
     }
 
-    public long getMaxOperations() {
-        return maxOperations;
+    public long getMAXreadsAndSwapsOnNodes() {
+        return MAXreadsAndSwapsOnNodes;
     }
 }

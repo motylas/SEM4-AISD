@@ -7,11 +7,10 @@ import java.util.Random;
 public class RBBST {
     private NodeRB root;
     private long comparisonBetweenValues = 0;
+    private long MAXcomparisonBetweenValues = 0;
     private long readsAndSwapsOnNodes = 0;
+    private long MAXreadsAndSwapsOnNodes = 0;
     private long allHeight = 0;
-    private long maxOperations = 0;
-    private long allOperations = 0;
-    private long currentOperations = 0;
 
     public NodeRB insert(int value) {
         clearValues();
@@ -29,7 +28,6 @@ public class RBBST {
             returnOperationCalculations();
             return null;
         }
-        currentOperations++;
         checkForViolations(currentNode);
         returnOperationCalculations();
         return currentNode;
@@ -38,23 +36,22 @@ public class RBBST {
     private void clearValues() {
         comparisonBetweenValues = 0;
         readsAndSwapsOnNodes = 0;
-        currentOperations = 0;
     }
 
     private void returnOperationCalculations() {
-        currentOperations += readsAndSwapsOnNodes + comparisonBetweenValues + 1;
-        if (maxOperations < currentOperations) maxOperations = currentOperations;
-        allOperations += currentOperations;
+        if (readsAndSwapsOnNodes > MAXreadsAndSwapsOnNodes) {
+            MAXreadsAndSwapsOnNodes = readsAndSwapsOnNodes;
+        }
+        if (comparisonBetweenValues > MAXcomparisonBetweenValues) {
+            MAXcomparisonBetweenValues = comparisonBetweenValues;
+        }
     }
 
     protected NodeRB insertRec(int value, NodeRB currentNode) {
         while (true) {
-            currentOperations++; //while check
-            currentOperations++; //not a comparison
             int currentNodeValue = currentNode.getValue();
             comparisonBetweenValues++; // value ==
             if (value == currentNodeValue) {
-                currentOperations++;
                 return null;
             } else if (value < currentNodeValue) {
                 comparisonBetweenValues++; // value <
@@ -94,12 +91,9 @@ public class RBBST {
                 readsAndSwapsOnNodes += 2; //uncle twice
                 if (uncle != null && uncle.isRed()) {
                     readsAndSwapsOnNodes++; //getParent
-                    currentOperations++; //setColor
                     currentNode.getParentNode().setColor(false);
-                    currentOperations++; // setColor only
                     uncle.setColor(false);
                     readsAndSwapsOnNodes += 2; // getParent twice
-                    currentOperations++; //setColor
                     currentNode.getParentNode().getParentNode().setColor(true);
                     readsAndSwapsOnNodes += 3; // currentNode = and getParent x2
                     currentNode = currentNode.getParentNode().getParentNode();
@@ -108,14 +102,11 @@ public class RBBST {
                     if (currentNode == currentNode.getParentNode().getRightNode()) {
                         readsAndSwapsOnNodes += 2; // = and get
                         currentNode = currentNode.getParentNode();
-                        currentOperations++;
                         leftRotation(currentNode);
                     }
                     readsAndSwapsOnNodes++; // get
-                    currentOperations++; // setColor
                     currentNode.getParentNode().setColor(false);
                     readsAndSwapsOnNodes += 2; // get x2
-                    currentOperations++; // setColor
                     currentNode.getParentNode().getParentNode().setColor(true);
                     readsAndSwapsOnNodes += 2; // get x2
                     rightRotation(currentNode.getParentNode().getParentNode());
@@ -124,15 +115,11 @@ public class RBBST {
                 readsAndSwapsOnNodes += 4; // = and get x3
                 NodeRB uncle = currentNode.getParentNode().getParentNode().getLeftNode();
                 readsAndSwapsOnNodes++; // != null
-                currentOperations++; // isRed
                 if (uncle != null && uncle.isRed()) {
                     readsAndSwapsOnNodes++; // getParent
-                    currentOperations++; //color
                     currentNode.getParentNode().setColor(false);
-                    currentOperations++;
                     uncle.setColor(false);
                     readsAndSwapsOnNodes += 2; //get x2
-                    currentOperations++; // color
                     currentNode.getParentNode().getParentNode().setColor(true);
                     readsAndSwapsOnNodes += 3; //= and getx2
                     currentNode = currentNode.getParentNode().getParentNode();
@@ -141,21 +128,17 @@ public class RBBST {
                     if (currentNode == currentNode.getParentNode().getLeftNode()) {
                         readsAndSwapsOnNodes += 2; // = and get
                         currentNode = currentNode.getParentNode();
-                        currentOperations++;
                         rightRotation(currentNode);
                     }
                     readsAndSwapsOnNodes++; // get
-                    currentOperations++; //setColor
                     currentNode.getParentNode().setColor(false);
                     readsAndSwapsOnNodes += 2; //get x2
-                    currentOperations++; //setColor
                     currentNode.getParentNode().getParentNode().setColor(true);
                     readsAndSwapsOnNodes += 2; // get x2
                     leftRotation(currentNode.getParentNode().getParentNode());
                 }
             }
         }
-        currentOperations++; // root
         root.setColor(false);
     }
 
@@ -166,7 +149,6 @@ public class RBBST {
         NodeRB rightCurrent = currentNode.getRightNode();
         readsAndSwapsOnNodes += 2; // = and get
         NodeRB leftOfRightCurrent = rightCurrent.getLeftNode();
-        currentOperations++; // not a comparison
         int value = currentNode.getValue();
         // Change parent
         // Current node not root
@@ -207,7 +189,6 @@ public class RBBST {
         NodeRB leftCurrent = currentNode.getLeftNode();
         readsAndSwapsOnNodes += 2; // = and get
         NodeRB rightOfLeftCurrent = leftCurrent.getRightNode();
-        currentOperations++; // not a comparison
         int value = currentNode.getValue();
         // Change parent
         readsAndSwapsOnNodes++; // parent !=
@@ -249,22 +230,17 @@ public class RBBST {
 
     private NodeRB deleteRec(int value, NodeRB currentNode) {
         while (true) {
-            currentOperations++; // while true
-            currentOperations++; // not a comparison
             int currentNodeValue = currentNode.getValue();
             comparisonBetweenValues++; // value ==
             if (value == currentNodeValue) {
                 readsAndSwapsOnNodes += 2; // hasLeft, hasRight
                 if (currentNode.hasLeft() && currentNode.hasRight()) {
-                    currentOperations++; //delete
                     delete2(currentNode);
                 } else if (currentNode.hasLeft() || currentNode.hasRight()) {
                     readsAndSwapsOnNodes += 2; //hasLeft hasRight
-                    currentOperations++; //delete
                     delete1(currentNode);
                 } else {
                     readsAndSwapsOnNodes += 2; //else if above
-                    currentOperations++; // delete;
                     delete0(currentNode);
                 }
                 returnOperationCalculations();
@@ -309,9 +285,7 @@ public class RBBST {
                 readsAndSwapsOnNodes += 2; //set
                 parent.setRightNode(null);
             }
-            currentOperations++; //isRed
             if (!currentNode.isRed()) {
-                currentOperations++;
                 doubleBlack(null, parent);
             }
         }
@@ -339,11 +313,8 @@ public class RBBST {
             }
             readsAndSwapsOnNodes += 2; //set
             child.setParentNode(parent);
-            currentOperations++; //setColor
             child.setColor(false);
-            currentOperations += 2; //isRed x2
             if (!currentNode.isRed() && !child.isRed()) {
-                currentOperations++;
                 doubleBlack(child, parent);
             }
         }
@@ -352,7 +323,6 @@ public class RBBST {
     private void delete2(NodeRB currentNode) {
         readsAndSwapsOnNodes += 2; // parent = and getLeft
         NodeRB parentOfMax = findParentMax(currentNode.getLeftNode(), currentNode);
-        currentOperations++;
         NodeRB maxNode;
         readsAndSwapsOnNodes++; // currentNode ==
         if (currentNode == parentOfMax) {
@@ -362,16 +332,13 @@ public class RBBST {
             readsAndSwapsOnNodes += 2; //maxNode = and getRight
             maxNode = parentOfMax.getRightNode();
         }
-        currentOperations++; // not comparison
         int maxNodeValue = maxNode.getValue();
         readsAndSwapsOnNodes += 2; //set
         currentNode.setValue(maxNodeValue);
         readsAndSwapsOnNodes++; // hasLeft
         if (maxNode.hasLeft()) {
-            currentOperations++;
             delete1(maxNode);
         } else {
-            currentOperations++;
             delete0(maxNode);
         }
     }
@@ -382,7 +349,6 @@ public class RBBST {
             readsAndSwapsOnNodes++; //getRight
             return findParentMax(currentNode.getRightNode(), currentNode);
         } else {
-            currentOperations++;
             return parentNode;
         }
     }
@@ -399,29 +365,24 @@ public class RBBST {
             NodeRB sibling = parent.getRightNode() == doubleBlackNode ? parent.getLeftNode() : parent.getRightNode();
             // a or b sibling black
             readsAndSwapsOnNodes++; // ==
-            currentOperations++; // isRed
             if (sibling == null || !sibling.isRed()) {
                 // a at least one child red
                 readsAndSwapsOnNodes += 5; // 2x has 2x get and != null
-                currentOperations += 2; // isRed
                 if (sibling != null && ((sibling.hasLeft() && sibling.getLeftNode().isRed()) || (sibling.hasRight() && sibling.getRightNode().isRed()))) {
                     // Left X case
                     readsAndSwapsOnNodes += 2; // == and get
                     if (sibling == parent.getLeftNode()) {
                         // Left Left Case
                         readsAndSwapsOnNodes += 2; // hasLeft and getLeft
-                        currentOperations++; // isRed
                         if (sibling.hasLeft() && sibling.getLeftNode().isRed()) {
                             rightRotation(parent);
                             readsAndSwapsOnNodes++; // getLeft
-                            currentOperations++; // setColor
                             sibling.getLeftNode().setColor(false);
                         }
                         // Left Right Case
                         else {
                             readsAndSwapsOnNodes += 2; // = and get
                             NodeRB rightChild = sibling.getRightNode();
-                            currentOperations++; // setColor
                             rightChild.setColor(false);
                             leftRotation(sibling);
                             rightRotation(rightChild);
@@ -431,18 +392,15 @@ public class RBBST {
                     else {
                         // Right Right Case
                         readsAndSwapsOnNodes += 2; // has and get
-                        currentOperations++; // isRed
                         if (sibling.hasRight() && sibling.getRightNode().isRed()) {
                             leftRotation(parent);
                             readsAndSwapsOnNodes++; //get
-                            currentOperations++; //setColor
                             sibling.getRightNode().setColor(false);
                         }
                         // Right Left Case
                         else {
                             readsAndSwapsOnNodes += 2; // = and get
                             NodeRB leftChild = sibling.getLeftNode();
-                            currentOperations++; //setColor
                             leftChild.setColor(false);
                             rightRotation(sibling);
                             leftRotation(leftChild);
@@ -454,11 +412,8 @@ public class RBBST {
                 else {
                     readsAndSwapsOnNodes++; // ==
                     if (sibling == null) return;
-                    currentOperations++; // setColor
                     sibling.setColor(true);
-                    currentOperations++; // setColor
                     if (parent.isRed()) {
-                        currentOperations++; // setColor
                         parent.setColor(false);
                         return;
                     }
@@ -468,7 +423,6 @@ public class RBBST {
             }
             // c sibling red
             else {
-                currentOperations += 2; //set Color x2
                 parent.setColor(true);
                 sibling.setColor(false);
                 // Left case
@@ -501,8 +455,7 @@ public class RBBST {
         q.add(node);
         int height = 0;
 
-        while (true)
-        {
+        while (true) {
             // nodeCount (queue size) indicates number of nodes
             // at current level.
             int nodeCount = q.size();
@@ -512,8 +465,7 @@ public class RBBST {
 
             // Dequeue all nodes of current level and Enqueue all
             // nodes of next level
-            while (nodeCount > 0)
-            {
+            while (nodeCount > 0) {
                 NodeRB newnode = q.peek();
                 q.remove();
                 if (newnode.getLeftNode() != null)
@@ -609,11 +561,11 @@ public class RBBST {
         return readsAndSwapsOnNodes;
     }
 
-    public long getAllOperations() {
-        return allOperations;
+    public long getMAXcomparisonBetweenValues() {
+        return MAXcomparisonBetweenValues;
     }
 
-    public long getMaxOperations() {
-        return maxOperations;
+    public long getMAXreadsAndSwapsOnNodes() {
+        return MAXreadsAndSwapsOnNodes;
     }
 }

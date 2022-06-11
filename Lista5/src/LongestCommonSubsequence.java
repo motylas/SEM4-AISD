@@ -52,8 +52,9 @@ public class LongestCommonSubsequence {
     }
 
     public static void main(String[] args) {
-        String X = "123454321";
-        String Y = "244261";
+        if (args.length < 2) return;
+        String X = args[0];
+        String Y = args[1];
         int m = X.length();
         int n = Y.length();
         System.out.println(lcs(X, Y, m, n));
